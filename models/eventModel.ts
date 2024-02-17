@@ -1,5 +1,5 @@
 import db from "../data/dbConfig";
-import { CreateEventInput } from "../types/custom";
+import { CreateEventInput, UniqueId } from "../types/custom";
 
 const createEvent = async (event: CreateEventInput) => {
   return db("events")
@@ -10,9 +10,13 @@ const createEvent = async (event: CreateEventInput) => {
     });
 };
 
+const getEvents = async (userId: string) => {
+  return db("events").where({ userId });
+};
+
 // TODO: Remove "any" and provide type for filter
 const findEventBy = async (filter: any) => {
   return db("events").where(filter).first();
 };
 
-export { createEvent, findEventBy };
+export { createEvent, getEvents, findEventBy };
