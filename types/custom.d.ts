@@ -8,4 +8,4 @@ export interface User {
 
 export type RegisterUserInput = Omit<User, "id">;
 
-
+export type LoginUserInput = Omit<User, ["id", "firstName", "lastName"]>;
