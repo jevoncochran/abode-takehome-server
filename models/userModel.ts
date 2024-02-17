@@ -16,4 +16,4 @@ const findUserBy = async (filter: any) => {
   return db("users").where(filter).first();
 };
 
-module.exports = { registerUser, findUserBy };
+export { registerUser, findUserBy };

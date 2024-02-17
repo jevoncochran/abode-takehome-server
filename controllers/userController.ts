@@ -1,26 +1,26 @@
 import { LoginUserInput, RegisterUserInput } from "../types/custom";
-const userService = require("../services/userService.ts");
-const bcrypt = require("bcryptjs");
+import * as userService from "../services/userService";
+import bcrypt from "bcryptjs";
+import { Request, Response } from "express";
 
 // @desc Register user
 // @route POST /api/users/register
 // @access Public
-// TODO: Remove "any" and provide types for req and res
-const registerUser = async (req: any, res: any) => {
+const registerUser = async (req: Request, res: Response) => {
   let { firstName, lastName, email, password }: RegisterUserInput = req.body;
 
   // Validate that required fields are not empty
   const isRequiredFieldEmpty = !firstName || !lastName || !email || !password;
 
   if (isRequiredFieldEmpty) {
-    res.status(400).json({ errMsg: "Please add all fields" });
+    return res.status(400).json({ errMsg: "Please add all fields" });
   }
 
   // Validate that user does not already exist
   const userExists = await userService.findUserBy({ email });
 
   if (userExists) {
-    res.status(400).json({ errMsg: "User already exists" });
+    return res.status(400).json({ errMsg: "User already exists" });
   }
 
   try {
@@ -33,7 +33,7 @@ const registerUser = async (req: any, res: any) => {
 
     // Remove password from user object
     delete newUser.password;
-    res.status(201).json(newUser);
+    return res.status(201).json(newUser);
   } catch (error) {
     console.log(error);
     res.status(500).json({ errMsg: "Unable to create user" });
@@ -43,8 +43,7 @@ const registerUser = async (req: any, res: any) => {
 // @desc Login user
 // @route POST /api/users/login
 // @access Public
-// TODO: Remove "any" and provide types for req and res
-const loginUser = async (req: any, res: any) => {
+const loginUser = async (req: Request, res: Response) => {
   const { email, password }: LoginUserInput = req.body;
 
   // Validate that required fields are not empty
@@ -70,4 +69,4 @@ const loginUser = async (req: any, res: any) => {
   res.status(200).json(user);
 };
 
-module.exports = { registerUser, loginUser };
+export { registerUser, loginUser };

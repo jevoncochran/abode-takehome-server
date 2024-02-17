@@ -1,7 +1,6 @@
 import { RegisterUserInput } from "../types/custom";
-
-const Users = require("../models/userModel.ts");
-const bcrypt = require("bcryptjs");
+import * as Users from "../models/userModel";
+import bcrypt from "bcryptjs";
 
 const registerUser = async (user: RegisterUserInput) => {
   let { firstName, lastName, email, password } = user;
@@ -21,4 +20,4 @@ const findUserBy = async (filter: any) => {
   return Users.findUserBy(filter);
 };
 
-module.exports = { registerUser, findUserBy };
+export { registerUser, findUserBy };

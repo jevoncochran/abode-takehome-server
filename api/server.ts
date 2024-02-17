@@ -1,15 +1,13 @@
-const express = require("express");
-const cors = require("cors");
-
-const userRouter = require("../routers/userRouter.ts");
+import express, { Request, Response } from "express";
+import cors from "cors";
+import userRouter from "../routers/userRouter";
 
 const server = express();
 
 server.use(cors());
 server.use(express.json());
 
-// TODO: Remove "any" and provide types for req and res
-server.get("/", (req: any, res: any) => {
+server.get("/", (req: Request, res: Response) => {
   res.status(200).json({ api: "up" });
 });
 
