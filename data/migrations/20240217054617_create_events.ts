@@ -8,9 +8,9 @@ export async function up(knex: Knex): Promise<void> {
 
     tbl.date("date").notNullable();
 
-    tbl.dateTime("startTime").notNullable();
+    tbl.dateTime("startTime");
 
-    tbl.dateTime("endTime").notNullable();
+    tbl.dateTime("endTime");
 
     tbl
       .uuid("userId")

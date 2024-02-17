@@ -1,6 +1,5 @@
 import { RegisterUserInput } from "../types/custom";
-
-const db = require("../data/dbConfig.ts");
+import db from "../data/dbConfig";
 
 const registerUser = async (user: RegisterUserInput) => {
   return db("users")
