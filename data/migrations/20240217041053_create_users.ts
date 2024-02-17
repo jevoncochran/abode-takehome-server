@@ -2,7 +2,7 @@ import type { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
   return knex.schema.createTable("users", (tbl) => {
-    tbl.uuid("id").primary().defaultTo(knex.raw("(UUID())"));
+    tbl.increments();
 
     tbl.string("firstName", 24).notNullable();
 

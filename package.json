@@ -4,6 +4,8 @@
   "description": "Abode Full Stack Engineer Take Home Assessment",
   "main": "index.ts",
   "scripts": {
+    "server": "nodemon index.ts",
+    "start": "node index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +23,7 @@
     "nodemon": "^3.0.3"
   },
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "knex": "^3.1.0",
