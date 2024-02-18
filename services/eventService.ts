@@ -1,7 +1,7 @@
 import * as Events from "../models/eventModel";
-import { CreateEventInput, UniqueId } from "../types/custom";
+import { EventInput, UniqueId } from "../types/custom";
 
-const createEvent = async (event: CreateEventInput) => {
+const createEvent = async (event: EventInput) => {
   return Events.createEvent(event);
 };
 
@@ -9,4 +9,12 @@ const getEvents = async (userId: string) => {
   return Events.getEvents(userId);
 };
 
-export { createEvent, getEvents };
+const getEvent = async (eventId: UniqueId) => {
+  return Events.findEventBy({ id: eventId });
+};
+
+const updateEvent = async (eventId: UniqueId, updates: EventInput) => {
+  return Events.updateEvent(eventId, updates);
+};
+
+export { createEvent, getEvents, getEvent, updateEvent };

@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import userRouter from "../routers/userRouter";
 import eventRouter from "../routers/eventRouter";
+import authenticate from "../middleware/authenticationMiddleware";
 
 const server = express();
 
@@ -13,6 +14,6 @@ server.get("/", (req: Request, res: Response) => {
 });
 
 server.use("/api/users", userRouter);
-server.use("/api/events", eventRouter);
+server.use("/api/events", authenticate, eventRouter);
 
 module.exports = server;

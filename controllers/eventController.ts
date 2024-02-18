@@ -1,19 +1,13 @@
 import * as eventService from "../services/eventService";
 import { Request, Response } from "express";
-import { CreateEventInput } from "../types/custom";
+import { EventInput, Event } from "../types/custom";
 
 // @desc Create event
 // @route POST /api/events
 // @access Private
 const createEvent = async (req: Request, res: Response) => {
-  const {
-    title,
-    date,
-    startTime,
-    endTime,
-    userId,
-    isAllDay,
-  }: CreateEventInput = req.body;
+  const { title, date, startTime, endTime, userId, isAllDay }: EventInput =
+    req.body;
 
   try {
     const event = await eventService.createEvent({
@@ -56,4 +50,35 @@ const getEvents = async (req: Request, res: Response) => {
   }
 };
 
-export { createEvent, getEvents };
+// @desc Update event
+// @route PUT /api/events/:id
+// @access Private
+const updateEvent = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  let updates: EventInput = req.body;
+
+  // Check if event exists
+  const existingEvent: Event = await eventService.getEvent(id);
+
+  if (!existingEvent) {
+    return res.status(400).json({ errMsg: "Event does not exist" });
+  }
+
+  // Check that user created the event
+  // Users can only update events they create
+  if (req.user.id.toString() !== existingEvent.userId) {
+    return res.status(401).json({ errMsg: "Unauthorized" });
+  }
+
+  try {
+    const updated = await eventService.updateEvent(id, updates);
+
+    res.status(201).json(updated);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ errMsg: "Unable to update event" });
+  }
+};
+
+export { createEvent, getEvents, updateEvent };

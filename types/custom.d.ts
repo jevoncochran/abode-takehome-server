@@ -23,4 +23,4 @@ export interface Event {
   isAllDay?: boolean;
 }
 
-export type CreateEventInput = Omit<Event, "id">;
+export type EventInput = Omit<Event, "id">;
