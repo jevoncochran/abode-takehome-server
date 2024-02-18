@@ -37,4 +37,19 @@ const createInvite = async (req: Request, res: Response) => {
   }
 };
 
-export { createInvite };
+// @desc Get invites (by user)
+// @route GET /api/invites
+// @access Private
+const getInvites = async (req: Request, res: Response) => {
+  const userId = req.user.id;
+
+  try {
+    const invites = await inviteService.getInvites(userId);
+    res.status(200).json(invites);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ errMsg: "Unable to retrieve invites" });
+  }
+};
+
+export { createInvite, getInvites };

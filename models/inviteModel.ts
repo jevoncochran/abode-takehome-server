@@ -10,9 +10,13 @@ const createInvite = async (invite: InviteInput) => {
     });
 };
 
+const getInvites = async (guestId: UniqueId) => {
+  return db("invites").where({ guestId });
+};
+
 // TODO: Remove "any" and provide type for filter
 const findInviteBy = async (filter: any) => {
   return db("invites").where(filter).first();
 };
 
-export { createInvite };
+export { createInvite, getInvites };
