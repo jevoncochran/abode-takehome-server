@@ -23,4 +23,8 @@ const updateEvent = async (eventId: UniqueId, updates: EventInput) => {
   return db("events").where({ id: eventId }).update(updates);
 };
 
-export { createEvent, getEvents, findEventBy, updateEvent };
+const deleteEvent = async (eventId: UniqueId) => {
+  return db("events").where({ id: eventId }).del();
+};
+
+export { createEvent, getEvents, findEventBy, updateEvent, deleteEvent };

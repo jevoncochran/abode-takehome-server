@@ -17,4 +17,8 @@ const updateEvent = async (eventId: UniqueId, updates: EventInput) => {
   return Events.updateEvent(eventId, updates);
 };
 
-export { createEvent, getEvents, getEvent, updateEvent };
+const deleteEvent = async (eventId: UniqueId) => {
+  return Events.deleteEvent(eventId);
+};
+
+export { createEvent, getEvents, getEvent, updateEvent, deleteEvent };

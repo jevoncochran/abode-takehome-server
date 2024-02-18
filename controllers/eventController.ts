@@ -81,4 +81,35 @@ const updateEvent = async (req: Request, res: Response) => {
   }
 };
 
-export { createEvent, getEvents, updateEvent };
+// @desc Delete event
+// @route DELETE /api/events/:id
+// @access Private
+const deleteEvent = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  // Check if event exists
+  const existingEvent: Event = await eventService.getEvent(id);
+
+  if (!existingEvent) {
+    return res
+      .status(400)
+      .json({ errMsg: "You cannot delete an event that does not exist" });
+  }
+
+  // Check that user created the event
+  // Users can only delete events they create
+  if (req.user.id.toString() !== existingEvent.userId) {
+    return res.status(401).json({ errMsg: "Unauthorized" });
+  }
+
+  try {
+    const deleted = await eventService.deleteEvent(id);
+
+    res.status(201).json(deleted);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ errMsg: "Unable to delete event" });
+  }
+};
+
+export { createEvent, getEvents, updateEvent, deleteEvent };
