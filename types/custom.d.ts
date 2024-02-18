@@ -24,3 +24,13 @@ export interface Event {
 }
 
 export type EventInput = Omit<Event, "id">;
+
+export interface Invite {
+  id: UniqueId;
+  eventId: UniqueId;
+  guestId: UniqueId;
+  accepted: boolean;
+  declined: boolean;
+}
+
+export type InviteInput = Omit<Invite, "id">;
