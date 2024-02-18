@@ -3,11 +3,14 @@ import * as eventService from "../services/eventService";
 import { Request, Response } from "express";
 import { InviteInput, Event } from "../types/custom";
 
-// @desc Create invite
+// @desc Send invites
 // @route POST /api/invites
 // @access Private
-const createInvite = async (req: Request, res: Response) => {
-  const { eventId, guestId, accepted, declined }: InviteInput = req.body;
+const sendInvites = async (req: Request, res: Response) => {
+  const invites: InviteInput[] = req.body;
+
+  // Grab the event ID from first invite of array for validation purposes
+  const { eventId } = invites[0];
 
   // Check that event exists
   const existingEvent: Event = await eventService.getEvent(eventId);
@@ -23,17 +26,12 @@ const createInvite = async (req: Request, res: Response) => {
   }
 
   try {
-    const invite = await inviteService.createInvite({
-      eventId,
-      guestId,
-      accepted,
-      declined,
-    });
+    const sent = await inviteService.sendInvites(invites);
 
-    res.status(201).json(invite);
+    res.status(201).json(sent);
   } catch (error) {
     console.log(error);
-    res.status(500).json({ errMsg: "Unable to send invite" });
+    res.status(500).json({ errMsg: "Unable to send invites" });
   }
 };
 
@@ -52,4 +50,4 @@ const getInvites = async (req: Request, res: Response) => {
   }
 };
 
-export { createInvite, getInvites };
+export { sendInvites, getInvites };

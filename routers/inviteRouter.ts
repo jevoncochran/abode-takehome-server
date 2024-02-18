@@ -1,9 +1,9 @@
 import express from "express";
-import { createInvite, getInvites } from "../controllers/inviteController";
+import { getInvites, sendInvites } from "../controllers/inviteController";
 
 const router = express.Router();
 
-router.post("/", createInvite);
+router.post("/", sendInvites);
 router.get("/", getInvites);
 
 export default router;

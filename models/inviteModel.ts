@@ -1,12 +1,18 @@
 import db from "../data/dbConfig";
-import { InviteInput, UniqueId } from "../types/custom";
+import { Invite, InviteInput, UniqueId } from "../types/custom";
 
-const createInvite = async (invite: InviteInput) => {
+const createInvites = async (invites: InviteInput[]) => {
   return db("invites")
-    .insert(invite, "id")
-    .then((ids: UniqueId[]) => {
-      const [id] = ids;
-      return findInviteBy(id);
+    .insert(invites, ["id"])
+    .then(async (ids: UniqueId[]) => {
+      // Initial array for returning invites
+      const sent: Invite[] = [];
+      //   Grab each newly created invite by ID and push it to array from above
+      for (const id of ids) {
+        const individualInvite = await findInviteBy(id);
+        sent.push(individualInvite);
+      }
+      return sent;
     });
 };
 
@@ -19,4 +25,4 @@ const findInviteBy = async (filter: any) => {
   return db("invites").where(filter).first();
 };
 
-export { createInvite, getInvites };
+export { createInvites, getInvites };
