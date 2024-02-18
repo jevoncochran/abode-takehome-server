@@ -7,7 +7,9 @@
     "outDir": "./dist",
     "skipLibCheck": true,
     "rootDirs": ["."],
-    "lib": ["es6"]
+    "lib": ["es6"],
+    // Custom merged types must come first
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
   "include": ["**/*.ts"],
   "exclude": ["node_modules"]

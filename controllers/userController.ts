@@ -1,7 +1,15 @@
-import { LoginUserInput, RegisterUserInput } from "../types/custom";
+import {
+  AuthenticatedUser,
+  LoginUserInput,
+  RegisterUserInput,
+} from "../types/custom";
 import * as userService from "../services/userService";
 import bcrypt from "bcryptjs";
 import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // @desc Register user
 // @route POST /api/users/register
@@ -49,24 +57,39 @@ const loginUser = async (req: Request, res: Response) => {
   // Validate that required fields are not empty
   const isRequiredFieldEmpty = !email || !password;
   if (isRequiredFieldEmpty) {
-    res.status(400).json({ errMsg: "Missing email or password" });
+    return res.status(400).json({ errMsg: "Missing email or password" });
   }
 
   // Check to see if user exists
   const user = await userService.findUserBy({ email });
   if (!user) {
-    res.status(401).json({ errMsg: "Incorrect email or password" });
+    return res.status(401).json({ errMsg: "Incorrect email or password" });
   }
 
   // Validate password
   const correctPassword = await bcrypt.compare(password, user.password);
   if (!correctPassword) {
-    res.status(401).json({ errMsg: "Incorrect email or password" });
+    return res.status(401).json({ errMsg: "Incorrect email or password" });
   }
 
   // Remove password from user object
   delete user.password;
-  res.status(200).json(user);
+
+  // Generate token
+  const token = generateAccessToken(user);
+  res.status(200).json({ user, token });
+};
+
+const generateAccessToken = (user: AuthenticatedUser) => {
+  const payload = {
+    id: user.id,
+    email: user.email,
+  };
+
+  const secret = process.env.JWT_SECRET_KEY;
+  const options = { expiresIn: "1h" };
+
+  return jwt.sign(payload, secret as string, options);
 };
 
 export { registerUser, loginUser };

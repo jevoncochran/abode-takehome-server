@@ -11,6 +11,8 @@ export type RegisterUserInput = Omit<User, "id">;
 
 export type LoginUserInput = Omit<User, ["id", "firstName", "lastName"]>;
 
+export type AuthenticatedUser = Omit<User, "password">;
+
 export interface Event {
   id: UniqueId;
   title: string;
