@@ -6,8 +6,9 @@ import { EventInput, Event } from "../types/custom";
 // @route POST /api/events
 // @access Private
 const createEvent = async (req: Request, res: Response) => {
-  const { title, date, startTime, endTime, userId, isAllDay }: EventInput =
-    req.body;
+  const { title, date, startTime, endTime, isAllDay }: EventInput = req.body;
+
+  const userId = req.user.id;
 
   try {
     const event = await eventService.createEvent({
@@ -27,7 +28,7 @@ const createEvent = async (req: Request, res: Response) => {
 };
 
 // @desc Get events (by user)
-// @route GET /api/events?userId=${userId}
+// @route GET /api/events
 // @access Private
 const getEvents = async (req: Request, res: Response) => {
   const userId = req.user.id;
