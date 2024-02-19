@@ -1,4 +1,5 @@
 export type UniqueId = number | string;
+
 export interface User {
   id: UniqueId;
   firstName: string;

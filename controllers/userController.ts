@@ -41,7 +41,12 @@ const registerUser = async (req: Request, res: Response) => {
 
     // Remove password from user object
     delete newUser.password;
-    return res.status(201).json(newUser);
+
+    // Generate token for newly created user
+    // Essentially, this logs in the newly created user
+    const token = generateAccessToken(newUser);
+    res.status(201).json({ user: newUser, token });
+
   } catch (error) {
     console.log(error);
     res.status(500).json({ errMsg: "Unable to create user" });
