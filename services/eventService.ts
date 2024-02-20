@@ -1,6 +1,7 @@
 import * as Events from "../models/eventModel";
 import * as Invites from "../models/inviteModel";
 import { EventInput, UniqueId } from "../types/custom";
+import { sortEvents } from "../utils/sortEvents";
 
 const createEvent = async (event: EventInput) => {
   return Events.createEvent(event);
@@ -32,9 +33,9 @@ const getEvents = async (userId: string) => {
     return { ...uce, userRelation: "created" };
   });
 
-  // TODO: Sort events by date
-  // TODO: Exclude past events
-  return [...userCreatedEventsPlusRelation, ...invitedEvents];
+  const allEvents = [...userCreatedEventsPlusRelation, ...invitedEvents];
+  const allEventsSorted = sortEvents(allEvents);
+  return allEventsSorted;
 };
 
 const getEvent = async (eventId: UniqueId) => {
