@@ -18,10 +18,11 @@ export interface Event {
   id: UniqueId;
   title: string;
   date: Date;
-  startTime?: Date;
-  endTime?: Date;
+  startTime?: Date | null;
+  endTime?: Date | null;
   userId: UniqueId;
   isAllDay?: boolean;
+  description?: string;
 }
 
 export type EventInput = Omit<Event, "id">;

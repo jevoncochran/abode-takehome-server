@@ -6,7 +6,8 @@ import { EventInput, Event } from "../types/custom";
 // @route POST /api/events
 // @access Private
 const createEvent = async (req: Request, res: Response) => {
-  const { title, date, startTime, endTime, isAllDay }: EventInput = req.body;
+  const { title, date, startTime, endTime, isAllDay, description }: EventInput =
+    req.body;
 
   const userId = req.user.id;
 
@@ -18,6 +19,7 @@ const createEvent = async (req: Request, res: Response) => {
       endTime,
       userId,
       isAllDay,
+      description,
     });
 
     res.status(201).json(event);
