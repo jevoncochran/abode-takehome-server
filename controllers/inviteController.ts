@@ -42,7 +42,7 @@ const getInvites = async (req: Request, res: Response) => {
   const userId = req.user.id;
 
   try {
-    const invites = await inviteService.getInvites(userId);
+    const invites = await inviteService.getInvitesByUser(userId);
     res.status(200).json(invites);
   } catch (error) {
     console.log(error);

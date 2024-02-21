@@ -10,7 +10,7 @@ const createEvent = async (event: EventInput) => {
 // This gets all events that specified user has created or been invited to
 const getEvents = async (userId: string) => {
   const userCreatedEvents = await Events.getEventsByCreator(userId);
-  const invites = await Invites.getInvites(userId);
+  const invites = await Invites.getInvitesByUser(userId);
 
   // Use invites data to generate list of events user has been invited to
   const invitedEvents = [];
@@ -34,7 +34,16 @@ const getEvents = async (userId: string) => {
   });
 
   const allEvents = [...userCreatedEventsPlusRelation, ...invitedEvents];
-  const allEventsSorted = sortEvents(allEvents);
+
+  // Retrieve guests data
+  const allEventsPlusGuests = [];
+  for (const event of allEvents) {
+    let invites = await Invites.getInvitesByEvent(event.id);
+    allEventsPlusGuests.push({ ...event, guests: invites });
+  }
+
+  const allEventsSorted = sortEvents(allEventsPlusGuests);
+
   return allEventsSorted;
 };
 

@@ -25,6 +25,17 @@ export interface Event {
   description?: string;
 }
 
+export interface NewEvent {
+  title: string;
+  date: Date;
+  startTime?: Date | null;
+  endTime?: Date | null;
+  userId: UniqueId;
+  isAllDay?: boolean;
+  description?: string;
+  usersToInvite: UniqueId[];
+}
+
 export type EventInput = Omit<Event, "id">;
 
 export interface Invite {
@@ -33,6 +44,11 @@ export interface Invite {
   guestId: UniqueId;
   accepted: boolean;
   declined: boolean;
+}
+
+export interface NewInvite {
+  eventId: UniqueId;
+  guestId: UniqueId;
 }
 
 export type InviteInput = Omit<Invite, "id">;

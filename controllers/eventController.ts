@@ -1,17 +1,26 @@
 import * as eventService from "../services/eventService";
+import * as inviteService from "../services/inviteService";
 import { Request, Response } from "express";
-import { EventInput, Event } from "../types/custom";
+import { EventInput, Event, NewEvent } from "../types/custom";
 
 // @desc Create event
 // @route POST /api/events
 // @access Private
 const createEvent = async (req: Request, res: Response) => {
-  const { title, date, startTime, endTime, isAllDay, description }: EventInput =
-    req.body;
+  const {
+    title,
+    date,
+    startTime,
+    endTime,
+    isAllDay,
+    description,
+    usersToInvite,
+  }: NewEvent = req.body;
 
   const userId = req.user.id;
 
   try {
+    // Create event
     const event = await eventService.createEvent({
       title,
       date,
@@ -22,7 +31,14 @@ const createEvent = async (req: Request, res: Response) => {
       description,
     });
 
-    res.status(201).json(event);
+    // Send invites
+    const inviteData = usersToInvite.map((userId) => {
+      return { eventId: event.id, guestId: userId };
+    });
+
+    await inviteService.sendInvites(inviteData);
+
+    return res.status(201).json(event);
   } catch (error) {
     console.log(error);
     res.status(500).json({ errMsg: "Unable to create event" });

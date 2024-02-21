@@ -15,9 +15,13 @@ const registerUser = async (user: RegisterUserInput) => {
   });
 };
 
+const getAllUsers = async () => {
+  return Users.getAllUsers();
+};
+
 // TODO: Remove "any" and provide type for filter
 const findUserBy = async (filter: any) => {
   return Users.findUserBy(filter);
 };
 
-export { registerUser, findUserBy };
+export { registerUser, getAllUsers, findUserBy };

@@ -46,7 +46,6 @@ const registerUser = async (req: Request, res: Response) => {
     // Essentially, this logs in the newly created user
     const token = generateAccessToken(newUser);
     res.status(201).json({ user: newUser, token });
-
   } catch (error) {
     console.log(error);
     res.status(500).json({ errMsg: "Unable to create user" });
@@ -85,6 +84,17 @@ const loginUser = async (req: Request, res: Response) => {
   res.status(200).json({ user, token });
 };
 
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const allUsers = await userService.getAllUsers();
+
+    return res.status(200).json(allUsers);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ errMsg: "Unable to retrieve users" });
+  }
+};
+
 const generateAccessToken = (user: AuthenticatedUser) => {
   const payload = {
     id: user.id,
@@ -97,4 +107,4 @@ const generateAccessToken = (user: AuthenticatedUser) => {
   return jwt.sign(payload, secret as string, options);
 };
 
-export { registerUser, loginUser };
+export { registerUser, loginUser, getAllUsers };
