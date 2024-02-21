@@ -2,13 +2,36 @@ import * as Events from "../models/eventModel";
 import * as Invites from "../models/inviteModel";
 import { EventInput, UniqueId } from "../types/custom";
 import { sortEvents } from "../utils/sortEvents";
+import { Event } from "../types/custom";
 
 const createEvent = async (event: EventInput) => {
   return Events.createEvent(event);
 };
 
+const getAllUpcomingEvents = async () => {
+  const allEvents: Event[] = await Events.getAllEvents();
+
+  const currentTime = new Date();
+  const today = currentTime.setHours(0, 0, 0, 0);
+  const currentTimeAsNum = currentTime.getTime();
+
+  const upcomingEvents = allEvents.filter((event: Event) => {
+    if (new Date(event.date).getTime() > today) {
+      return true;
+    } else if (new Date(event.date).getTime() === today) {
+      if (event.startTime && event.startTime.getTime() > currentTimeAsNum) {
+        return true;
+      }
+    }
+  });
+
+  // console.log(sortEvents(upcomingEvents));
+
+  return sortEvents(upcomingEvents);
+};
+
 // This gets all events that specified user has created or been invited to
-const getEvents = async (userId: string) => {
+const getEventsByUser = async (userId: string) => {
   const userCreatedEvents = await Events.getEventsByCreator(userId);
   const invites = await Invites.getInvitesByUser(userId);
 
@@ -59,4 +82,11 @@ const deleteEvent = async (eventId: UniqueId) => {
   return Events.deleteEvent(eventId);
 };
 
-export { createEvent, getEvents, getEvent, updateEvent, deleteEvent };
+export {
+  createEvent,
+  getAllUpcomingEvents,
+  getEventsByUser,
+  getEvent,
+  updateEvent,
+  deleteEvent,
+};

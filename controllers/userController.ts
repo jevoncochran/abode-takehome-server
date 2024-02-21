@@ -102,7 +102,7 @@ const generateAccessToken = (user: AuthenticatedUser) => {
   };
 
   const secret = process.env.JWT_SECRET_KEY;
-  const options = { expiresIn: "1h" };
+  const options = { expiresIn: "24h" };
 
   return jwt.sign(payload, secret as string, options);
 };

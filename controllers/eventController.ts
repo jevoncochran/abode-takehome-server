@@ -32,11 +32,13 @@ const createEvent = async (req: Request, res: Response) => {
     });
 
     // Send invites
-    const inviteData = usersToInvite.map((userId) => {
+    const inviteData = usersToInvite?.map((userId) => {
       return { eventId: event.id, guestId: userId };
     });
 
-    await inviteService.sendInvites(inviteData);
+    if (inviteData) {
+      await inviteService.sendInvites(inviteData);
+    }
 
     return res.status(201).json(event);
   } catch (error) {
@@ -45,14 +47,14 @@ const createEvent = async (req: Request, res: Response) => {
   }
 };
 
-// @desc Get events (by user)
+// @desc Get events by user
 // @route GET /api/events
 // @access Private
-const getEvents = async (req: Request, res: Response) => {
+const getEventsByUser = async (req: Request, res: Response) => {
   const userId = req.user.id;
 
   try {
-    const events = await eventService.getEvents(userId);
+    const events = await eventService.getEventsByUser(userId);
     res.status(200).json(events);
   } catch (error) {
     console.log(error);
@@ -122,4 +124,4 @@ const deleteEvent = async (req: Request, res: Response) => {
   }
 };
 
-export { createEvent, getEvents, updateEvent, deleteEvent };
+export { createEvent, getEventsByUser, updateEvent, deleteEvent };
