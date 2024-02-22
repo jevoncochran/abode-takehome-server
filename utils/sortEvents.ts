@@ -1,6 +1,6 @@
-import { Event } from "../types/custom";
+import { ExistingEvent } from "../types/custom";
 
-const sortEvents = (events: Event[]) => {
+const sortEvents = (events: ExistingEvent[]) => {
   return events.sort((a, b) => {
     const dateComparison =
       new Date(a.date).getTime() - new Date(b.date).getTime();

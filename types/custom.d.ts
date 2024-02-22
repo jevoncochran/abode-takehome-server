@@ -36,12 +36,19 @@ export interface NewEvent {
   usersToInvite: UniqueId[];
 }
 
+export interface ExistingEvent extends Event {
+  userRelation: UserRelation;
+  invite?: EventInviteData;
+  guests: Invite[];
+}
+
 export type EventInput = Omit<Event, "id">;
 
 export interface Invite {
   id: UniqueId;
   eventId: UniqueId;
   guestId: UniqueId;
+  email: string;
   accepted: boolean;
   declined: boolean;
 }

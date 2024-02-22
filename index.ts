@@ -1,12 +1,8 @@
-import { getAllUpcomingEvents } from "./services/eventService";
-import { scheduleEmailAlerts } from "./utils/cronJobs";
-
+import { checkUpcomingJobs } from "./utils/cronJobs";
 const app = require("./api/server");
 
-// Schedule the email alerts cron job
-// scheduleEmailAlerts();
-
-getAllUpcomingEvents();
+// Scans event database every minute checking for events for which alerts need to be sent to invitees
+checkUpcomingJobs();
 
 const port = process.env.PORT || 8000;
 
