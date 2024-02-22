@@ -5,6 +5,7 @@ import { Event } from "../types/custom";
 import { sortEvents } from "../utils/sortEvents";
 import { v4 as uuid } from "uuid";
 import AWS from "aws-sdk";
+import { filterFutureEvents } from "../utils/filterFutureEvents";
 
 // S3 Configuration
 const s3 = new AWS.S3({
@@ -22,22 +23,7 @@ const createEvent = async (event: EventInput) => {
 const getAllUpcomingEvents = async () => {
   const allEvents: ExistingEvent[] = await Events.getAllEvents();
 
-  const currentTime = new Date();
-  const today = currentTime.setHours(0, 0, 0, 0);
-  const currentTimeAsNum = currentTime.getTime();
-
-  const upcomingEvents = allEvents.filter((event: ExistingEvent) => {
-    if (new Date(event.date).getTime() > today) {
-      return true;
-    } else if (new Date(event.date).getTime() === today) {
-      if (
-        event.startTime &&
-        new Date(event.startTime).getTime() > currentTimeAsNum
-      ) {
-        return true;
-      }
-    }
-  });
+  const upcomingEvents = filterFutureEvents(allEvents);
 
   // Retrieve guests data
   const upcomingEventsPlusGuests = [];
@@ -86,7 +72,8 @@ const getEventsByUser = async (userId: string) => {
 
   const allEventsSorted = sortEvents(allEventsPlusGuests);
 
-  return allEventsSorted;
+  // Remove past events and return
+  return filterFutureEvents(allEventsSorted);
 };
 
 const getEvent = async (eventId: UniqueId) => {
