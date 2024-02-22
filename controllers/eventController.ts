@@ -1,6 +1,6 @@
+import { Request, Response } from "express";
 import * as eventService from "../services/eventService";
 import * as inviteService from "../services/inviteService";
-import { Request, Response } from "express";
 import { EventInput, Event, NewEvent } from "../types/custom";
 
 // @desc Create event
@@ -119,7 +119,7 @@ const deleteEvent = async (req: Request, res: Response) => {
   try {
     const deleted = await eventService.deleteEvent(id);
 
-    res.status(201).json(deleted);
+    res.status(204).json(deleted);
   } catch (error) {
     console.log(error);
     res.status(500).json({ errMsg: "Unable to delete event" });

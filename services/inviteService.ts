@@ -1,5 +1,5 @@
 import * as Invites from "../models/inviteModel";
-import { InviteInput, NewInvite, UniqueId } from "../types/custom";
+import { NewInvite, UniqueId } from "../types/custom";
 
 const sendInvites = async (invites: NewInvite[]) => {
   return Invites.createInvites(invites);

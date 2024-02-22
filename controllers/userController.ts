@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import {
   AuthenticatedUser,
   LoginUserInput,
@@ -5,7 +6,6 @@ import {
 } from "../types/custom";
 import * as userService from "../services/userService";
 import bcrypt from "bcryptjs";
-import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 

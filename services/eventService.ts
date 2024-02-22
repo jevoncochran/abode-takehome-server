@@ -1,8 +1,8 @@
 import * as Events from "../models/eventModel";
 import * as Invites from "../models/inviteModel";
 import { EventInput, ExistingEvent, UniqueId } from "../types/custom";
-import { sortEvents } from "../utils/sortEvents";
 import { Event } from "../types/custom";
+import { sortEvents } from "../utils/sortEvents";
 import { v4 as uuid } from "uuid";
 import AWS from "aws-sdk";
 

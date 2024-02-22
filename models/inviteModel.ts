@@ -1,5 +1,5 @@
 import db from "../data/dbConfig";
-import { Invite, InviteInput, NewInvite, UniqueId } from "../types/custom";
+import { Invite, NewInvite, UniqueId } from "../types/custom";
 
 const createInvites = async (invites: NewInvite[]) => {
   return db("invites")

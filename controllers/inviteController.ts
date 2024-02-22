@@ -1,6 +1,6 @@
+import { Request, Response } from "express";
 import * as inviteService from "../services/inviteService";
 import * as eventService from "../services/eventService";
-import { Request, Response } from "express";
 import { InviteInput, Event } from "../types/custom";
 
 // @desc Send invites
