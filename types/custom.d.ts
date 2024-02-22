@@ -23,6 +23,7 @@ export interface Event {
   userId: UniqueId;
   isAllDay?: boolean;
   description?: string;
+  image: string | null;
 }
 
 export interface NewEvent {
@@ -33,12 +34,13 @@ export interface NewEvent {
   userId: UniqueId;
   isAllDay?: boolean;
   description?: string;
+  image: string | null;
   usersToInvite: UniqueId[];
 }
 
 export interface ExistingEvent extends Event {
   userRelation: UserRelation;
-  invite?: EventInviteData;
+  invite?: EventInviteData; 
   guests: Invite[];
 }
 

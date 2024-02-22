@@ -3,6 +3,17 @@ import * as Invites from "../models/inviteModel";
 import { EventInput, ExistingEvent, UniqueId } from "../types/custom";
 import { sortEvents } from "../utils/sortEvents";
 import { Event } from "../types/custom";
+import { v4 as uuid } from "uuid";
+import AWS from "aws-sdk";
+
+// S3 Configuration
+const s3 = new AWS.S3({
+  region: "us-east-2",
+  credentials: {
+    accessKeyId: process.env.S3_ACCESS_KEY as string,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY as string,
+  },
+});
 
 const createEvent = async (event: EventInput) => {
   return Events.createEvent(event);
@@ -90,6 +101,29 @@ const deleteEvent = async (eventId: UniqueId) => {
   return Events.deleteEvent(eventId);
 };
 
+const uploadEventImage = async (file: Express.Multer.File) => {
+  const buffer = file?.buffer;
+
+  const mimeType = file?.mimetype;
+  const fileExtension = mimeType?.split("/")[1];
+  const fileName = `${uuid()}.${fileExtension}`;
+  const newFileName = `${Date.now()}-${fileName}`;
+
+  const params = {
+    Bucket: process.env.S3_BUCKET_NAME as string,
+    Key: newFileName,
+    Body: buffer,
+    ContentType: mimeType,
+    ACL: "public-read",
+  };
+
+  await s3.upload(params).promise();
+
+  const link = `https://${process.env.S3_BUCKET_NAME}.s3.us-east-2.amazonaws.com/${newFileName}`;
+
+  return link;
+};
+
 export {
   createEvent,
   getAllUpcomingEvents,
@@ -97,4 +131,5 @@ export {
   getEvent,
   updateEvent,
   deleteEvent,
+  uploadEventImage,
 };

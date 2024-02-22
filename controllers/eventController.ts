@@ -14,6 +14,7 @@ const createEvent = async (req: Request, res: Response) => {
     endTime,
     isAllDay,
     description,
+    image,
     usersToInvite,
   }: NewEvent = req.body;
 
@@ -29,6 +30,7 @@ const createEvent = async (req: Request, res: Response) => {
       userId,
       isAllDay,
       description,
+      image,
     });
 
     // Send invites
@@ -124,4 +126,28 @@ const deleteEvent = async (req: Request, res: Response) => {
   }
 };
 
-export { createEvent, getEventsByUser, updateEvent, deleteEvent };
+// @desc Upload event image
+// @route POST /api/events/images
+// @access Private
+const uploadEventImage = async (req: Request, res: Response) => {
+  try {
+    const file = req.file;
+
+    const link = await eventService.uploadEventImage(
+      file as Express.Multer.File
+    );
+
+    return res.status(201).json({ success: true, link });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, errMsg: "Unable to upload image" });
+  }
+};
+
+export {
+  createEvent,
+  getEventsByUser,
+  updateEvent,
+  deleteEvent,
+  uploadEventImage,
+};

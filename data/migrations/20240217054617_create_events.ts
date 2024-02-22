@@ -23,6 +23,8 @@ export async function up(knex: Knex): Promise<void> {
     tbl.boolean("isAllDay");
 
     tbl.text("description");
+
+    tbl.string("image");
   });
 }
 
