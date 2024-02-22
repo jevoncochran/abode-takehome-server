@@ -10,9 +10,13 @@ const registerUser = async (user: RegisterUserInput) => {
     });
 };
 
+const getAllUsers = async () => {
+  return db("users").select("id", "email", "firstName", "lastName");
+};
+
 // TODO: Remove "any" and provide type for filter
 const findUserBy = async (filter: any) => {
   return db("users").where(filter).first();
 };
 
-export { registerUser, findUserBy };
+export { registerUser, getAllUsers, findUserBy };

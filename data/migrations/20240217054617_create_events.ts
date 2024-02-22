@@ -21,6 +21,10 @@ export async function up(knex: Knex): Promise<void> {
       .onDelete("CASCADE");
 
     tbl.boolean("isAllDay");
+
+    tbl.text("description");
+
+    tbl.string("image");
   });
 }
 

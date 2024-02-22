@@ -1,12 +1,12 @@
 import * as Invites from "../models/inviteModel";
-import { InviteInput, UniqueId } from "../types/custom";
+import { NewInvite, UniqueId } from "../types/custom";
 
-const sendInvites = async (invites: InviteInput[]) => {
+const sendInvites = async (invites: NewInvite[]) => {
   return Invites.createInvites(invites);
 };
 
-const getInvites = async (guestId: UniqueId) => {
-  return Invites.getInvites(guestId);
+const getInvitesByUser = async (guestId: UniqueId) => {
+  return Invites.getInvitesByUser(guestId);
 };
 
-export { sendInvites, getInvites };
+export { sendInvites, getInvitesByUser };

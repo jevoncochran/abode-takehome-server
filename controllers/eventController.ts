@@ -1,15 +1,27 @@
-import * as eventService from "../services/eventService";
 import { Request, Response } from "express";
-import { EventInput, Event } from "../types/custom";
+import * as eventService from "../services/eventService";
+import * as inviteService from "../services/inviteService";
+import { EventInput, Event, NewEvent } from "../types/custom";
 
 // @desc Create event
 // @route POST /api/events
 // @access Private
 const createEvent = async (req: Request, res: Response) => {
-  const { title, date, startTime, endTime, userId, isAllDay }: EventInput =
-    req.body;
+  const {
+    title,
+    date,
+    startTime,
+    endTime,
+    isAllDay,
+    description,
+    image,
+    usersToInvite,
+  }: NewEvent = req.body;
+
+  const userId = req.user.id;
 
   try {
+    // Create event
     const event = await eventService.createEvent({
       title,
       date,
@@ -17,23 +29,34 @@ const createEvent = async (req: Request, res: Response) => {
       endTime,
       userId,
       isAllDay,
+      description,
+      image,
     });
 
-    res.status(201).json(event);
+    // Send invites
+    const inviteData = usersToInvite?.map((userId) => {
+      return { eventId: event.id, guestId: userId };
+    });
+
+    if (inviteData) {
+      await inviteService.sendInvites(inviteData);
+    }
+
+    return res.status(201).json(event);
   } catch (error) {
     console.log(error);
     res.status(500).json({ errMsg: "Unable to create event" });
   }
 };
 
-// @desc Get events (by user)
-// @route GET /api/events?userId=${userId}
+// @desc Get events by user
+// @route GET /api/events
 // @access Private
-const getEvents = async (req: Request, res: Response) => {
+const getEventsByUser = async (req: Request, res: Response) => {
   const userId = req.user.id;
 
   try {
-    const events = await eventService.getEvents(userId);
+    const events = await eventService.getEventsByUser(userId);
     res.status(200).json(events);
   } catch (error) {
     console.log(error);
@@ -96,11 +119,35 @@ const deleteEvent = async (req: Request, res: Response) => {
   try {
     const deleted = await eventService.deleteEvent(id);
 
-    res.status(201).json(deleted);
+    res.status(204).json(deleted);
   } catch (error) {
     console.log(error);
     res.status(500).json({ errMsg: "Unable to delete event" });
   }
 };
 
-export { createEvent, getEvents, updateEvent, deleteEvent };
+// @desc Upload event image
+// @route POST /api/events/images
+// @access Private
+const uploadEventImage = async (req: Request, res: Response) => {
+  try {
+    const file = req.file;
+
+    const link = await eventService.uploadEventImage(
+      file as Express.Multer.File
+    );
+
+    return res.status(201).json({ success: true, link });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, errMsg: "Unable to upload image" });
+  }
+};
+
+export {
+  createEvent,
+  getEventsByUser,
+  updateEvent,
+  deleteEvent,
+  uploadEventImage,
+};

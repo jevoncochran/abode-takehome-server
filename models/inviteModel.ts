@@ -1,7 +1,7 @@
 import db from "../data/dbConfig";
-import { Invite, InviteInput, UniqueId } from "../types/custom";
+import { Invite, NewInvite, UniqueId } from "../types/custom";
 
-const createInvites = async (invites: InviteInput[]) => {
+const createInvites = async (invites: NewInvite[]) => {
   return db("invites")
     .insert(invites, ["id"])
     .then(async (ids: UniqueId[]) => {
@@ -16,8 +16,15 @@ const createInvites = async (invites: InviteInput[]) => {
     });
 };
 
-const getInvites = async (guestId: UniqueId) => {
+const getInvitesByUser = async (guestId: UniqueId) => {
   return db("invites").where({ guestId });
+};
+
+const getInvitesByEvent = async (eventId: UniqueId) => {
+  return db("invites as i")
+    .join("users as u", "u.id", "i.guestId")
+    .select("i.id as inviteId", "i.guestId", "u.email", "i.accepted", "i.declined")
+    .where({ eventId });
 };
 
 // TODO: Remove "any" and provide type for filter
@@ -25,4 +32,4 @@ const findInviteBy = async (filter: any) => {
   return db("invites").where(filter).first();
 };
 
-export { createInvites, getInvites };
+export { createInvites, getInvitesByUser, getInvitesByEvent };

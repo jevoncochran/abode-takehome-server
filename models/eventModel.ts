@@ -10,7 +10,11 @@ const createEvent = async (event: EventInput) => {
     });
 };
 
-const getEvents = async (userId: string) => {
+const getAllEvents = async () => {
+  return db("events");
+};
+
+const getEventsByCreator = async (userId: string) => {
   return db("events").where({ userId });
 };
 
@@ -27,4 +31,11 @@ const deleteEvent = async (eventId: UniqueId) => {
   return db("events").where({ id: eventId }).del();
 };
 
-export { createEvent, getEvents, findEventBy, updateEvent, deleteEvent };
+export {
+  createEvent,
+  getAllEvents,
+  getEventsByCreator,
+  findEventBy,
+  updateEvent,
+  deleteEvent,
+};

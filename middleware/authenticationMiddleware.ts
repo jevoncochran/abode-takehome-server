@@ -27,7 +27,6 @@ const verifyAccessToken = (token: string) => {
 
   try {
     const decoded = jwt.verify(token, secret as string);
-    console.log("decoded: ", decoded);
 
     return { success: true, data: decoded };
   } catch (error: any) {

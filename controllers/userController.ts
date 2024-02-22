@@ -1,3 +1,4 @@
+import { Request, Response } from "express";
 import {
   AuthenticatedUser,
   LoginUserInput,
@@ -5,7 +6,6 @@ import {
 } from "../types/custom";
 import * as userService from "../services/userService";
 import bcrypt from "bcryptjs";
-import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
@@ -41,7 +41,11 @@ const registerUser = async (req: Request, res: Response) => {
 
     // Remove password from user object
     delete newUser.password;
-    return res.status(201).json(newUser);
+
+    // Generate token for newly created user
+    // Essentially, this logs in the newly created user
+    const token = generateAccessToken(newUser);
+    res.status(201).json({ user: newUser, token });
   } catch (error) {
     console.log(error);
     res.status(500).json({ errMsg: "Unable to create user" });
@@ -80,6 +84,17 @@ const loginUser = async (req: Request, res: Response) => {
   res.status(200).json({ user, token });
 };
 
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const allUsers = await userService.getAllUsers();
+
+    return res.status(200).json(allUsers);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ errMsg: "Unable to retrieve users" });
+  }
+};
+
 const generateAccessToken = (user: AuthenticatedUser) => {
   const payload = {
     id: user.id,
@@ -87,9 +102,9 @@ const generateAccessToken = (user: AuthenticatedUser) => {
   };
 
   const secret = process.env.JWT_SECRET_KEY;
-  const options = { expiresIn: "1h" };
+  const options = { expiresIn: "24h" };
 
   return jwt.sign(payload, secret as string, options);
 };
 
-export { registerUser, loginUser };
+export { registerUser, loginUser, getAllUsers };
