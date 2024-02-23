@@ -36,18 +36,17 @@ export interface ExistingEvent extends Event {
   guests: Invite[];
 }
 
-export interface Invite {
-  id: UniqueId;
-  eventId: UniqueId;
-  guestId: UniqueId;
-  email: string;
-  accepted: boolean;
-  declined: boolean;
-}
-
 export interface NewInvite {
   eventId: UniqueId;
   guestId: UniqueId;
 }
 
-export type InviteInput = Omit<Invite, "id">;
+export interface Invite extends NewInvite {
+  id: UniqueId;
+  email: string;
+  accepted: boolean;
+  declined: boolean;
+}
+
+
+

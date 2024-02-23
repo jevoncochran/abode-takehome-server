@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import * as inviteService from "../services/inviteService";
 import * as eventService from "../services/eventService";
-import { InviteInput, Event } from "../types/custom";
+import { NewInvite, Event } from "../types/custom";
 
 // @desc Send invites
 // @route POST /api/invites
 // @access Private
 const sendInvites = async (req: Request, res: Response) => {
-  const invites: InviteInput[] = req.body;
+  const invites: NewInvite[] = req.body;
 
   // Grab the event ID from first invite of array for validation purposes
   const { eventId } = invites[0];
