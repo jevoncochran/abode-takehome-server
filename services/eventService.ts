@@ -1,6 +1,6 @@
 import * as Events from "../models/eventModel";
 import * as Invites from "../models/inviteModel";
-import { EventInput, ExistingEvent, UniqueId } from "../types/custom";
+import { NewEvent, ExistingEvent, UniqueId } from "../types/custom";
 import { Event } from "../types/custom";
 import { sortEvents } from "../utils/sortEvents";
 import { v4 as uuid } from "uuid";
@@ -16,7 +16,7 @@ const s3 = new AWS.S3({
   },
 });
 
-const createEvent = async (event: EventInput) => {
+const createEvent = async (event: NewEvent) => {
   return Events.createEvent(event);
 };
 
@@ -80,7 +80,7 @@ const getEvent = async (eventId: UniqueId) => {
   return Events.findEventBy({ id: eventId });
 };
 
-const updateEvent = async (eventId: UniqueId, updates: EventInput) => {
+const updateEvent = async (eventId: UniqueId, updates: ExistingEvent) => {
   return Events.updateEvent(eventId, updates);
 };
 

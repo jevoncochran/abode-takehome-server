@@ -1,7 +1,7 @@
 import db from "../data/dbConfig";
-import { EventInput, UniqueId } from "../types/custom";
+import { NewEvent, ExistingEvent, UniqueId } from "../types/custom";
 
-const createEvent = async (event: EventInput) => {
+const createEvent = async (event: NewEvent) => {
   return db("events")
     .insert(event, "id")
     .then((ids: string[]) => {
@@ -23,7 +23,7 @@ const findEventBy = async (filter: any) => {
   return db("events").where(filter).first();
 };
 
-const updateEvent = async (eventId: UniqueId, updates: EventInput) => {
+const updateEvent = async (eventId: UniqueId, updates: ExistingEvent) => {
   return db("events").where({ id: eventId }).update(updates);
 };
 

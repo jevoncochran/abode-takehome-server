@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as eventService from "../services/eventService";
 import * as inviteService from "../services/inviteService";
-import { EventInput, Event, NewEvent } from "../types/custom";
+import { Event, NewEvent, ExistingEvent } from "../types/custom";
 
 // @desc Create event
 // @route POST /api/events
@@ -70,7 +70,7 @@ const getEventsByUser = async (req: Request, res: Response) => {
 const updateEvent = async (req: Request, res: Response) => {
   const { id } = req.params;
 
-  let updates: EventInput = req.body;
+  let updates: ExistingEvent = req.body;
 
   // Check if event exists
   const existingEvent: Event = await eventService.getEvent(id);
