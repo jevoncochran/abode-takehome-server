@@ -26,25 +26,15 @@ export interface Event {
   image: string | null;
 }
 
-export interface NewEvent {
-  title: string;
-  date: Date;
-  startTime?: Date | null;
-  endTime?: Date | null;
-  userId: UniqueId;
-  isAllDay?: boolean;
-  description?: string;
-  image: string | null;
-  usersToInvite: UniqueId[];
+export interface NewEvent extends Omit<Event, "id"> {
+  usersToInvite?: UniqueId[];
 }
 
 export interface ExistingEvent extends Event {
   userRelation: UserRelation;
-  invite?: EventInviteData; 
+  invite?: EventInviteData;
   guests: Invite[];
 }
-
-export type EventInput = Omit<Event, "id">;
 
 export interface Invite {
   id: UniqueId;
